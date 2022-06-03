@@ -1,8 +1,12 @@
-# homebridge-intesisbox
+# homebridge-intesisbox-v2
 
 [Homebridge](https://github.com/nfarina/homebridge) plugin for [Intesisbox](https://www.intesisbox.com) devices including [ASCII](https://www.intesisbox.com/en/ascii/gateways/) and [WMP/Wi-Fi gateways](https://www.intesisbox.com/en/wifi/gateways/), integrating various reverse-cycle air conditioners by Daikin, Fujitsu, Mitsubishi, Panasonic, Toshiba, and others with [Apple HomeKit](https://developer.apple.com/homekit/) for control from iPhones and other Apple devices
 
 I use an [Intesisbox FJ-RC-WMP-1](https://www.intesisbox.com/en/fujitsu-ascii-wifi-vrf-fj-rc-wmp-1/gateway/) connected to a Fujitsu ducted unit ([ARTG24LMLC](https://www.fujitsugeneral.com.au/product/artg24lmlc---7.1kw(c)-8.0kw(h))) and this works great.
+
+@philask
+
+Also works fine with the Intesisbox INWMPMHI001I000 unit.
 
 # Installation
 
@@ -13,7 +17,7 @@ I use an [Intesisbox FJ-RC-WMP-1](https://www.intesisbox.com/en/fujitsu-ascii-wi
 
 2. Install this plugin:
    ```
-   npm install -g homebridge-intesisbox
+   npm install -g homebridge-intesisbox-v2
    ```
 
 3. Update your configuration file. See configuration options below.
@@ -56,3 +60,5 @@ Fields:
 # Acknowledgements
 
 This package was originally forked from [zylantha's first attempt](https://github.com/zylantha/homebridge-intesisbox) but then completely rewritten, with reference to [wailuen's homebridge-sensibo-sky plugin](https://github.com/wailuen/homebridge-sensibo-sky).
+
+Improved by Phil Askey in June 2022.
