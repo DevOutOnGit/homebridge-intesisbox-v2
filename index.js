@@ -1,4 +1,4 @@
-// Intesisbox WMP bridge
+// Intesisbox WMP bridge V2
 
 const EventEmitter = require("events")
 const net = require("net");
@@ -11,7 +11,7 @@ module.exports = function(homebridge){
   Characteristic = homebridge.hap.Characteristic;
   UUIDGen = homebridge.hap.uuid;
 
-  homebridge.registerAccessory("homebridge-intesisbox", "Intesisbox", Intesisbox);
+  homebridge.registerAccessory("homebridge-intesisbox-v2", "Intesisbox", Intesisbox);
 };
 
 const NULL_VALUE = "32768";
@@ -28,6 +28,8 @@ class Intesisbox extends EventEmitter {
     this.host = config.host;
     this.port = config.port || 3310;
     this.number = config.number || 1;
+    
+    this.pingCount = 0;
 
     if (!this.host) {
       this.log.error("Missing host, cannot connect to device");
@@ -232,10 +234,10 @@ class Intesisbox extends EventEmitter {
   }
 
   onSocketClose() {
-    this.log("Connection closed, reconnecting in 30 seconds");
+    this.log("Connection unexpectedly closed, reconnecting in 15 seconds");
     setTimeout(function() {
       this.connect();
-    }.bind(this), 30000);
+    }.bind(this), 15000);
   }
 
   onID(id) {
@@ -248,6 +250,8 @@ class Intesisbox extends EventEmitter {
     this.informationService.setCharacteristic(Characteristic.SerialNumber, mac);
     this.informationService.setCharacteristic(Characteristic.Name, name);
     this.informationService.setCharacteristic(Characteristic.FirmwareRevision, version);
+	
+	this.log("ID", model, version);
   }
 
   onINFO(name, value) {
@@ -258,48 +262,48 @@ class Intesisbox extends EventEmitter {
     if (name == "ONOFF") {
       this.state.onoff = value;
       if (value == "ON" ) {
-        this.log("Device turned ON")
+        this.log("Powered ON")
       } else if (value == "OFF") {
-        this.log("Device turned OFF")
+        this.log("Powered OFF")
       } else {
         this.log.warn("Unknown ONOFF value:", value)
       }
     } else if (name == "MODE") {
       this.state.mode = value;
       if (value == "AUTO" ) {
-        this.log("Device set to AUTO mode")
+        this.log("AUTO mode")
       } else if (value == "HEAT") {
-        this.log("Device set to HEAT mode")
+        this.log("HEAT mode")
       } else if (value == "COOL") {
-        this.log("Device set to COOL mode")
+        this.log("COOL mode")
       } else if (value == "FAN") {
-        this.log("Device set to FAN mode (unsupported in HomeKit)")
+        this.log("FAN mode (unsupported in HomeKit)")
       } else if (value == "DRY") {
-        this.log("Device set to DRY mode (unsupported in HomeKit)")
+        this.log("DRY mode (unsupported in HomeKit)")
       } else {
-        this.log.warn("Device set to unknown mode:", value)
+        this.log.warn("Unknown mode:", value)
       }
     } else if (name == "SETPTEMP") {
       this.state.setptemp = value;
-      this.log("Device target temperature set to:", value);
+      this.log("Target temperature:", value/10);
     } else if (name == "FANSP") {
       this.state.fansp = value;
-      this.log("Device fanspeed set to:", value);
+      this.log("Fanspeed:", value);
     } else if (name == "VANEUD") {
       this.state.vaneud = value;
-      this.log("Device vertical vane set to:", value);
+      this.log("Vertical vane:", value);
     } else if (name == "VANELR") {
       this.state.vanelr = value;
-      this.log("Device horizontal vane set to:", value);
+      this.log("Horizontal vane:", value);
     } else if (name == "ERRSTATUS") {
       this.state.errstatus = value;
-      this.log.debug("Device error status:", value);
+      this.log.debug("Error status:", value);
     } else if (name == "ERRCODE") {
       this.state.errcode = value;
-      this.log.debug("Device error code:", value);
+      this.log.debug("Error code:", value);
     } else if (name == "AMBTEMP") {
       this.state.ambtemp = value;
-      this.log("Device ambient temperature now:", value);
+      this.log("Ambient temperature:", value/10);
     }
   }
 
@@ -319,7 +323,16 @@ class Intesisbox extends EventEmitter {
     if (callback) {
       this.once("PING", function(value) { callback(null, value) });
     }
-    this.send("PING");
+    
+    this.pingCount += 1;
+    
+    // Force update ambient temperature every 10 pings (10 minutes)
+    //
+    // if(this.pingCount % 10 == 0) {
+    	// this.sendGET("AMBTEMP");
+    // } else {
+	    this.send("PING");
+    // }
     
     setTimeout(function() {
 	   this.sendPING();
