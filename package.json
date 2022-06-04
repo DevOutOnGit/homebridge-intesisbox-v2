@@ -1,6 +1,6 @@
 {
   "name": "homebridge-intesisbox-v2",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Homebridge plugin for Intesisbox (improved)",
   "author": "Samuel Cochran / Phil Askey",
   "license": "MIT",
