@@ -55,7 +55,7 @@ Fields:
 
 # References
 
-- [Intesisbox WMP ASCII protocol specs](https://www.intesisbox.com/intesis/product/media/intesisbox_wmp_protocol_specs_en.pdf?v=2.2)
+- [Intesisbox WMP ASCII protocol specs](https://www.intesis.com/docs/wmp-protocol-specs)
 
 # Acknowledgements
 
