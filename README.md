@@ -43,9 +43,9 @@ Add an accessory to your homebridge `config.json`, like:
 Fields:
 
 - `accessory` must always be `Intesisbox`
-- `name` defaults to `Intesisbox` but can be set to whatever your device to be called, like `Air Conditioner`
+- `name` defaults to `Intesisbox` but can be set to whatever your device is to be called, like `Air Conditioner`
 - `host` must be the IP address of your device
-- `port` defaults to `3310` but can be overriden
+- `port` defaults to `3310` but can be overridden
 - `number` defaults to `1` but can be set to your unit number if you have multiple units connected to the same device
 
 # TODO
@@ -62,3 +62,5 @@ Fields:
 This package was originally forked from [zylantha's first attempt](https://github.com/zylantha/homebridge-intesisbox) but then completely rewritten, with reference to [wailuen's homebridge-sensibo-sky plugin](https://github.com/wailuen/homebridge-sensibo-sky).
 
 Improved by Phil Askey in June 2022.
+
+Fork created to merge improvements by [@philask](https://github.com/philask) and pull request changes proposed by [@systemx-xx](https://github.com/sj26/homebridge-intesisbox/pull/2) for the root repo.
